@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">CommunityApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="communities">Communities</string>
+    <string name="community">community</string>
+    <string name="item_name">Item Name</string>
+
+    <!--    registration and login-->
+    <string name="registration_page">Registration Page</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="register_account">Register Account</string>
+    <string name="login_page">Login Page</string>
+    <string name="email">enter email</string>
+    <string name="name">name</string>
+    <string name="logout">Logout</string>
+    <string name="logout_button">logout Button</string>
+
+    <!--    navigation items-->
+    <string-array name="navigation_drawer_items_array">
+        <item>Calendar</item>
+        <item>Location</item>
+        <item>Login</item>
+    </string-array>
+
+</resources>
