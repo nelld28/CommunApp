@@ -11,20 +11,23 @@
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="register_account">Register Account</string>
     <string name="login_page">Login Page</string>
-    <string name="email">enter email</string>
     <string name="name">name</string>
     <string name="logout">Logout</string>
     <string name="logout_button">logout Button</string>
+    <string name="nav_header_desc">navigation header description</string>
+    <string name="nav_header_subtitle">navigation subtitle</string>
+    <string name="nav_header_title">nav header title</string>
+    <string name="card_group_name">Group Name</string>
+    <string name="admin_name">Admin</string>
+    <string name="group_name">Group Name</string>
 
     <!--    navigation items-->
     <string-array name="navigation_drawer_items_array">
         <item>Calendar</item>
         <item>Location</item>
-        <item>Login</item>
+        <item>Logout</item>
+        <item>HomePage</item>
     </string-array>
 
 </resources>

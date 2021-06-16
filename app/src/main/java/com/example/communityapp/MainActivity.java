@@ -31,12 +31,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.example.communityapp.Model.Post;
+import com.example.communityapp.fragment.fragment_homePage;
+import com.example.communityapp.fragment.groupFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     ActionBarDrawerToggle mDrawerToggle;
+    FirebaseUser currentUser;
 
     static int PReqCode = 1;
     static int REQUESTCODE = 1;
 
 //    Image picker
-    Uri pickedImgUri;
+    Uri pickedImgUri = null;
 
 //    Popup Post
     Dialog popUpAddPost;
@@ -66,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
+
         Log.d("tag", "onCreate: " + firebaseAuth.getCurrentUser().getEmail() +firebaseAuth.getCurrentUser().getDisplayName());
 
         mTitle = mDrawerTitle =getTitle();
@@ -82,11 +95,12 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
 //        Content titles to be navigated
-        DataModel[] drawerItem = new DataModel[3];
+        DataModel[] drawerItem = new DataModel[4];
 
         drawerItem[0] = new DataModel(R.drawable.calendar_dra, "calendar");
         drawerItem[1] = new DataModel(R.drawable.com_loc, "location");
-        drawerItem[2] = new DataModel(R.drawable.login_logo, "Login");
+        drawerItem[2] = new DataModel(R.drawable.login_logo, "logout");
+        drawerItem[3] = new DataModel(R.drawable.login_logo, "homepage");
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -101,23 +115,32 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
 
+//        adapter for group left
+
+
 //        popup
         Popup();
         setupPopupImageClick();
 
 
+
+
 //        fab Button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popUpAddPost.show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popUpAddPost.show();
+//            }
+//        });
 
       }
 
-//      to set up image in popup post
+//          END OF ONCREATE
+
+
+
+    //      to set up image in popup post
     private void setupPopupImageClick() {
         popUpPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
             else
             {
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE},
                         PReqCode);
             }
 
@@ -187,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         popUpClickProgress = popUpAddPost.findViewById(R.id.popup_progressBar);
 
 //        user profile pic
-        //YET TO ADD 26:18
+        Glide.with(MainActivity.this).load(currentUser.getPhotoUrl()).into(popUpUserImage);
 
 
 //        post click listener
@@ -196,33 +220,81 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 popUpAddBtn.setVisibility(View.INVISIBLE);
                 popUpClickProgress.setVisibility(View.VISIBLE);
+
+                if(!popUpTitle.getText().toString().isEmpty()
+                        && !popUpDescription.getText().toString().isEmpty()){
+
+                    StorageReference storageReference = FirebaseStorage.getInstance()
+                            .getReference()
+                            .child("images");
+                    final StorageReference imageFilePath = storageReference.child(pickedImgUri.getLastPathSegment());
+                    imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String imgDownloadLink = uri.toString();
+                                    Post post = new Post(popUpTitle.getText().toString() ,
+                                            popUpDescription.getText().toString(),
+                                            imgDownloadLink,
+                                            currentUser.getUid(),
+                                            currentUser.getPhotoUrl().toString());
+
+//                                    add post to firebase
+                                    addPost(post);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+//                                    something goes wrong in uploading picture
+                                    showMessage(e.getMessage());
+                                    popUpClickProgress.setVisibility(View.INVISIBLE);
+                                    popUpAddBtn.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+                else {
+                    showMessage("Please fill all required fields");
+                    popUpAddBtn.setVisibility(View.VISIBLE);
+                    popUpClickProgress.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
 
-    //    LOGOUT FROM APP
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
+    private void addPost(Post post) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Posts").push();
 
-        GoogleSignIn.getClient(this, new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .build())
-                .signOut()
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//        get post unique id and  update post key
+        String key = myRef.getKey();
+        post.setPostKey(key);
+
+
+//        add post data to firebase database
+        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                startActivity(new Intent(view.getContext()
-                ,login_activity.class));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Failed LogOut", Toast.LENGTH_SHORT)
-                        .show();
+                showMessage("Post added successfully");
+                popUpClickProgress.setVisibility(View.INVISIBLE);
+                popUpAddBtn.setVisibility(View.VISIBLE);
+                popUpAddPost.dismiss();
             }
         });
 
     }
+
+    private void showMessage(String message) {
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+    }
+
+
 
 
 //    Side Navigation
@@ -241,11 +313,16 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new calendar_fragment();
                 break;
             case 1:
-                fragment = new fragment_homePage();
+                fragment = new groupFragment();
                 break;
 
-//            case 2:
-//                fragment = new login_Fragment();
+            case 2:
+                logout();
+                break;
+
+            case 3:
+                fragment = new fragment_homePage();
+
             default:
                 break;
         }
@@ -254,7 +331,8 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager
                     .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
+                    .add(R.id.content_frame, fragment)
+                    .addToBackStack("fragment")
                     .commit();
 
             mDrawerList.setItemChecked(position, true);
@@ -267,6 +345,42 @@ public class MainActivity extends AppCompatActivity {
         else {
             Log.e("MainActivity", "Error om creating fragment" );
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
+    //    could be deleted later
+    private void logout() {
+        logout();
+    }
+
+
+    //    LOGOUT FROM APP
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+
+        GoogleSignIn.getClient(this, new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .build())
+                .signOut()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(view.getContext()
+                                ,login_activity.class));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Failed LogOut", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
     }
 
     @Override

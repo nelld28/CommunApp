@@ -1,5 +1,5 @@
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,24 +8,36 @@
 
     <TextView
         android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
+        android:layout_marginStart="120dp"
+        android:text="Calendar"
         android:textSize="45dp"
-        android:text="Connect"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <TextView
-        android:layout_below="@id/label"
-        android:layout_centerInParent="true"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_marginStart="50dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:text="Edit fragment_connect.xml to change the appearance"
-        android:id="@+id/textView2" />
+        android:background="@drawable/bg_calendar">
 
-</RelativeLayout>
+        <CalendarView
+            android:layout_width="wrap_content"
+            android:layout_height="320dp"
+            />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/purple_200"/>
+
+</LinearLayout>
