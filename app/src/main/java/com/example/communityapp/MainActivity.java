@@ -78,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+
+//        Toast.makeText(MainActivity.this, "Firebase connected", Toast.LENGTH_SHORT).show();
 
         Log.d("tag", "onCreate: " + firebaseAuth.getCurrentUser().getEmail() +firebaseAuth.getCurrentUser().getDisplayName());
 

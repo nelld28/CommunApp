@@ -7,6 +7,10 @@ public class group_intro {
     public group_intro(String groupName) {
     }
 
+    public group_intro() {
+
+    }
+
     public String getGroupName() {
         return groupName;
     }

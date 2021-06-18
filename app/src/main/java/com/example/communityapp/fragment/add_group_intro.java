@@ -2,8 +2,10 @@ package com.example.communityapp.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +16,26 @@ import android.widget.Toast;
 
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.widget.Toast.*;
 import static android.widget.Toast.LENGTH_SHORT;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link add_group_intro#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class add_group_intro extends Fragment {
 
     private EditText groupNameEt;
-    private ImageView groupAdd;
+    private ImageView groupAdd, groupCancel;
 
     FirebaseDatabase groupDatabase;
 
     DatabaseReference groupDataRef;
+
+    group_intro groupIntro;
 
     public add_group_intro() {
         // Required empty public constructor
@@ -41,9 +44,7 @@ public class add_group_intro extends Fragment {
 
     // TODO: Rename and change types and number of parameters
     public static add_group_intro newInstance() {
-        add_group_intro fragment = new add_group_intro();
-
-        return fragment;
+        return new add_group_intro();
     }
 
 
@@ -57,31 +58,61 @@ public class add_group_intro extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview =  inflater.inflate(R.layout.fragment_add_group_intro2, container, false);
+        final View rootview;
+        rootview =  inflater.inflate(R.layout.fragment_add_group_intro2, container, false);
 
-        groupNameEt = rootview.findViewById(R.id.group_name);
+        groupNameEt = rootview.findViewById(R.id.group_name_text);
         groupDatabase = FirebaseDatabase.getInstance();
         groupDataRef = groupDatabase.getReference().child("group_intro");
         groupAdd = rootview.findViewById(R.id.group_add);
+        groupCancel = rootview.findViewById(R.id.group_cancel);
+
+        groupIntro = new group_intro();
 
         groupAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertData();
+                String groupName = groupNameEt.getText().toString();
+
+                if(TextUtils.isEmpty(groupName)){
+                    Toast.makeText(getActivity(), "Enter value", LENGTH_SHORT).show();
+                    
+                }
+                else
+                {
+                    addDataToFirebase(groupName);
+                }
+            }
+        });
+
+        groupCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment_homePage.newInstance())
+                        .commitNow();
             }
         });
         return rootview;
 
     }
 
-    private void insertData() {
-        String groupName = groupNameEt.getText().toString();
+    private void addDataToFirebase(String groupName) {
+        groupIntro.setGroupName(groupName);
 
-        group_intro groupInt = new group_intro(groupName);
+        groupDataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupDataRef.setValue(groupIntro);
+                Toast.makeText(getActivity(), "data added", LENGTH_SHORT).show();
+            }
 
-        groupDataRef.push().setValue(groupInt);
-
-        Toast.makeText(getActivity(), "data inserted", LENGTH_SHORT).show();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), "Failed to add data", LENGTH_SHORT).show();
+            }
+        });
     }
 
 

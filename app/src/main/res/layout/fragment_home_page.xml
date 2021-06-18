@@ -2,8 +2,8 @@
 <RelativeLayout android:layout_height="wrap_content"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/homePage_frag"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homePage_frag">
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fab_group"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="40dp"
+        tools:listitem="@layout/list_card_row"/>
 
 
 </RelativeLayout>

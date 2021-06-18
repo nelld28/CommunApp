@@ -38,12 +38,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 //   //Firebase dependencies
-    implementation platform('com.google.firebase:firebase-bom:28.0.1') //Bill of Materials; firebase dependencies
+    implementation platform('com.google.firebase:firebase-bom:28.1.0') //Bill of Materials; firebase dependencies
     implementation 'com.google.firebase:firebase-analytics' //firebase dependencies
     implementation 'com.google.firebase:firebase-auth' //for authentication services
     implementation 'com.google.android.gms:play-services-auth:19.0.0' //google play services library
 
-
+    implementation 'com.firebaseui:firebase-ui-database:7.2.0'
     implementation 'androidx.recyclerview:recyclerview'
 
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
