@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/purple_200"
-    >
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/group_name"
@@ -30,8 +28,8 @@
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="40dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/group_name"/>
+        android:hint="@string/group_name"
+        android:inputType="textPersonName" />
 
     <ImageView
         android:id="@+id/group_add"
@@ -43,9 +41,9 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/circle_bg"
         android:clickable="true"
+        android:focusable="true"
         android:padding="12dp"
-        android:src="@drawable/add_circle"
-        android:focusable="true" />
+        android:src="@drawable/add_circle" />
 
     <ImageView
         android:id="@+id/group_cancel"

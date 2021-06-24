@@ -74,9 +74,12 @@ public class add_group_intro extends Fragment {
             public void onClick(View v) {
                 String groupName = groupNameEt.getText().toString();
 
+//                groupIntro.setGroupName(groupName);
+//                groupDataRef.push().setValue(groupIntro);
+
                 if(TextUtils.isEmpty(groupName)){
                     Toast.makeText(getActivity(), "Enter value", LENGTH_SHORT).show();
-                    
+
                 }
                 else
                 {

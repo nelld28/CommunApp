@@ -17,7 +17,8 @@
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
-        >
+        android:onClick=""
+       >
 
         <!--
         In the above cardview widget

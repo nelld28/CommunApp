@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 public class calendar_fragment extends Fragment {
 
 
+
     public calendar_fragment() {
         // Required empty public constructor
     }
@@ -28,6 +29,7 @@ public class calendar_fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_calendar_fragment, container, false);
+
 
         return rootView;    }
 }

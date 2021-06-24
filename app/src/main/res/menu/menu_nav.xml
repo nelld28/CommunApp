@@ -3,12 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <item
-        android:id="@+id/setting_menu"
-        android:title="settings" />
-    <item
-        android:id="@+id/help_menu"
-        android:title="help"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item1"
+            android:icon="@drawable/login_logo"
+            android:title="@string/logout"/>
+    </group>
+
 
 
 </menu>

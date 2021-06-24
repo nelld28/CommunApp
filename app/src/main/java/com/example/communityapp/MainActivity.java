@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mDrawerToggle;
     FirebaseUser currentUser;
 
-    static int PReqCode = 1;
+    private static int PReqCode = 1;
     static int REQUESTCODE = 1;
 
 //    Image picker
@@ -70,20 +71,19 @@ public class MainActivity extends AppCompatActivity {
 
 //    Popup Post
     Dialog popUpAddPost;
-    ImageView popUpUserImage, popUpPostImage, popUpAddBtn;
+    ImageView popUpUserImage, popUpPostImage, popUpAddBtn, adminButton;
     TextView popUpTitle, popUpDescription;
     ProgressBar popUpClickProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
+//        Current User Authentication
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-//        Toast.makeText(MainActivity.this, "Firebase connected", Toast.LENGTH_SHORT).show();
 
         Log.d("tag", "onCreate: " + firebaseAuth.getCurrentUser().getEmail() +firebaseAuth.getCurrentUser().getDisplayName());
 
@@ -96,12 +96,11 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
 //        Content titles to be navigated
-        DataModel[] drawerItem = new DataModel[4];
+        DataModel[] drawerItem = new DataModel[3];
 
         drawerItem[0] = new DataModel(R.drawable.calendar_dra, "calendar");
         drawerItem[1] = new DataModel(R.drawable.com_loc, "location");
-        drawerItem[2] = new DataModel(R.drawable.login_logo, "logout");
-        drawerItem[3] = new DataModel(R.drawable.login_logo, "homepage");
+        drawerItem[2] = new DataModel(R.drawable.ic_home, "homepage");
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -118,23 +117,35 @@ public class MainActivity extends AppCompatActivity {
 
 //        adapter for group left
 
+        adminButton = (ImageView) findViewById(R.id.admin_button);
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), admin_login.class);
+                startActivity(intent);
+            }
+        });
+
 
 //        popup
         Popup();
         setupPopupImageClick();
 
 
-
-
 //        fab Button
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popUpAddPost.show();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpAddPost.show();
+            }
+        });
 
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, new fragment_homePage() )
+                .commitNow();
       }
 
 //          END OF ONCREATE
@@ -154,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkAndRequestForPermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
                 Toast.makeText(MainActivity.this,"Please accept for required permission",Toast.LENGTH_SHORT).show();
 
@@ -178,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     private void openGallery() {
 
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("Image/*");
+        galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, REQUESTCODE);
 
     }
@@ -223,11 +234,12 @@ public class MainActivity extends AppCompatActivity {
                 popUpClickProgress.setVisibility(View.VISIBLE);
 
                 if(!popUpTitle.getText().toString().isEmpty()
-                        && !popUpDescription.getText().toString().isEmpty()){
+                        && !popUpDescription.getText().toString().isEmpty()
+                && pickedImgUri != null){
 
                     StorageReference storageReference = FirebaseStorage.getInstance()
                             .getReference()
-                            .child("images");
+                            .child("image_posts");
                     final StorageReference imageFilePath = storageReference.child(pickedImgUri.getLastPathSegment());
                     imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -296,8 +308,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
 //    Side Navigation
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -312,27 +322,26 @@ public class MainActivity extends AppCompatActivity {
         switch (position){
             case 0:
                 fragment = new calendar_fragment();
+
                 break;
             case 1:
                 fragment = new groupFragment();
                 break;
 
             case 2:
-                logout();
-                break;
-
-            case 3:
                 fragment = new fragment_homePage();
+                break;
 
             default:
                 break;
         }
 
         if (fragment != null){
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.content_frame, fragment)
+                    .replace( R.id.content_frame, fragment)
                     .addToBackStack("fragment")
                     .commit();
 
@@ -352,11 +361,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-    }
-
-    //    could be deleted later
-    private void logout() {
-        logout();
     }
 
 

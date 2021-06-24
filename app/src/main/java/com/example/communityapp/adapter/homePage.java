@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.R;
@@ -42,9 +43,11 @@ public class homePage extends FirebaseRecyclerAdapter<group_intro, homePage.grou
 //  to call from group_intro data model
     public class group_introViewHolder extends RecyclerView.ViewHolder {
         TextView card_group_name;
+        CardView groupCard;
     public group_introViewHolder(@NonNull View itemView) {
         super(itemView);
         card_group_name = itemView.findViewById(R.id.card_group_name);
+
 
     }
 }
