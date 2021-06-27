@@ -1,62 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/group_name"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:background="#ffffff"
+        android:id="@+id/community_creater_user_image"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="0dp"
-        android:text="@string/group_name"
-        android:textSize="30sp" />
+        app:layout_constraintBottom_toTopOf="@+id/community_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/community_name"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
-        android:id="@+id/group_name_text"
+        android:id="@+id/community_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/post_edittext_style"
+        android:ems="10"
+        android:hint="Community Name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/community_creater_user_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:background="@drawable/post_edittext_style"
+        android:id="@+id/community_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/community_name" />
+
+    <ImageView
+        android:background="#2d2d2d"
+        android:id="@+id/community_img"
+        android:layout_width="0dp"
+        android:layout_height="225dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/community_description"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+
+        android:id="@+id/comm_add"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/circle_bg"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/community_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/community_img"
+        app:srcCompat="@drawable/ic_create_post" />
+
+    <ProgressBar
+        android:id="@+id/comm_progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/group_name"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="40dp"
-        android:ems="10"
-        android:hint="@string/group_name"
-        android:inputType="textPersonName" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/comm_add"
+        app:layout_constraintStart_toStartOf="@+id/comm_add"
+        app:layout_constraintTop_toTopOf="@+id/comm_add" />
 
-    <ImageView
-        android:id="@+id/group_add"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/group_name_text"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/circle_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="12dp"
-        android:src="@drawable/add_circle" />
 
-    <ImageView
-        android:id="@+id/group_cancel"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/group_name_text"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/circle_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="12dp"
-        app:srcCompat="@drawable/cancel_pic" />
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

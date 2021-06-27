@@ -2,9 +2,12 @@ package com.example.communityapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class admin_login extends AppCompatActivity {
 
@@ -21,22 +24,22 @@ public class admin_login extends AppCompatActivity {
         adminPassword = findViewById(R.id.admin_password);
         adminLogin = findViewById(R.id.admin_login);
 
-        checkField(adminName);
-        checkField(adminPassword);
+        adminLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adminName.getText().toString().equals("admin") &&
+                adminPassword.getText().toString().equals("admin")){
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+                else
+                {
+                    Toast.makeText(admin_login.this, "Wrong credentials", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    private boolean checkField(EditText adminName) {
-        if (adminName.getText().toString().isEmpty() ){
-            adminName.setError("Error");
-            valid = false;
-        }
 
-        else{
-            valid = true;
-        }
-
-        return valid;
-    }
 
 
 }

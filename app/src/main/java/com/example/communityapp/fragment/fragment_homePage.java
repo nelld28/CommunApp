@@ -111,18 +111,18 @@ public class fragment_homePage extends Fragment {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-//        fab_g = rootview.findViewById(R.id.fab_group);
+        fab_g = rootview.findViewById(R.id.fab_group);
 
-//        fab_g.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.homePage_frag, add_group_intro.newInstance())
-//                        .commitNow();
-//            }
-//        });
+        fab_g.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homePage_frag, add_group_intro.newInstance())
+                        .commitNow();
+            }
+        });
         // end of fab
 
         RVdatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -175,16 +175,7 @@ public class fragment_homePage extends Fragment {
 //        });
 
 
-//        groupCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.content_frame, groupFragment.newInstance())
-//                        .addToBackStack(null)
-//                        .commitNow();
-//            }
-//        });
+
 
         if(container != null){
             container.removeAllViews();

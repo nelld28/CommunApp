@@ -2,6 +2,8 @@ package com.example.communityapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.media.Image;
 import android.os.Bundle;
@@ -18,14 +20,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Comment;
 import com.example.communityapp.R;
+import com.example.communityapp.adapter.CommentAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class post_Details extends AppCompatActivity {
@@ -38,9 +46,12 @@ public class post_Details extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
     FirebaseUser fbUser;
-
     FirebaseDatabase fbDatabase;
 
+    RecyclerView CommentRV;
+    CommentAdapter commentAdapter;
+    List<Comment> listComment;
+    static  String COMMENT_KEY = "Comment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +61,7 @@ public class post_Details extends AppCompatActivity {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-
+        CommentRV = findViewById(R.id.commentRV );
         imgPost = findViewById(R.id.post_detail_img);
         imgUserPost = findViewById(R.id.post_detail_user_img);
         imgCurrentUser = findViewById(R.id.post_detail_currentUser_img);
@@ -70,7 +81,7 @@ public class post_Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addCommentBtn.setVisibility(View.INVISIBLE);
-                DatabaseReference commentRef = fbDatabase.getReference("Comment").child(post_Key).push();
+                DatabaseReference commentRef = fbDatabase.getReference(COMMENT_KEY).child(post_Key).push();
                 String comment_content = editTextComment.getText().toString();
                 String uid = fbUser.getUid();
                 String uname = fbUser.getDisplayName();
@@ -114,8 +125,33 @@ public class post_Details extends AppCompatActivity {
         String datePost = timeStampToString(getIntent().getExtras().getLong("postDate"));
         txtPostDateName.setText(datePost);
 
+        inRVComment();
+
     }
 
+    private void inRVComment() {
+        CommentRV.setLayoutManager(new LinearLayoutManager(this));
+
+        DatabaseReference commentRef = fbDatabase.getReference(COMMENT_KEY).child(post_Key);
+        commentRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listComment = new ArrayList<>();
+                for (DataSnapshot snap:snapshot.getChildren()){
+                    Comment comment = snap.getValue(Comment.class);
+                    listComment.add(comment);
+                }
+
+                commentAdapter = new CommentAdapter(getApplicationContext(), listComment);
+                CommentRV.setAdapter(commentAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 
     private void showMessage(String message) {

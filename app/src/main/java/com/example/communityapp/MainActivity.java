@@ -34,6 +34,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Post;
+import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.fragment.fragment_homePage;
 import com.example.communityapp.fragment.groupFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -75,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
     TextView popUpTitle, popUpDescription;
     ProgressBar popUpClickProgress;
 
+    Dialog popUpAddComm;
+    private TextView commName, commDesc;
+    private ImageView commImg, commUserImg, commAddBtn;
+    ProgressBar commProg;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,12 +105,12 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
 //        Content titles to be navigated
-        DataModel[] drawerItem = new DataModel[3];
+        DataModel[] drawerItem = new DataModel[4];
 
         drawerItem[0] = new DataModel(R.drawable.calendar_dra, "calendar");
         drawerItem[1] = new DataModel(R.drawable.com_loc, "location");
         drawerItem[2] = new DataModel(R.drawable.ic_home, "homepage");
-
+        drawerItem[3] = new DataModel(R.drawable.group_add, "Community");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -127,10 +136,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        popup
+
+//       post popup
         Popup();
         setupPopupImageClick();
 
+        popUpComm();
+        setUpCommImageClick();
+
+//        community popup
 
 //        fab Button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -141,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fabComm = (FloatingActionButton) findViewById(R.id.fab_comm);
+        fabComm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpAddComm.show();
+            }
+        });
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -148,8 +169,106 @@ public class MainActivity extends AppCompatActivity {
                 .commitNow();
       }
 
-//          END OF ONCREATE
+    private void setUpCommImageClick() {
+        commImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAndRequestForPermission();
+            }
+        });
 
+    }
+
+    //          END OF ONCREATE
+
+    private void popUpComm() {
+        popUpAddComm = new Dialog(this);
+        popUpAddComm.setContentView(R.layout.fragment_add_group_intro2);
+        popUpAddComm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popUpAddComm.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        popUpAddComm.getWindow().getAttributes().gravity = Gravity.TOP;
+
+        commName = popUpAddComm.findViewById(R.id.community_name);
+        commDesc = popUpAddComm.findViewById(R.id.community_description);
+        commUserImg = popUpAddComm.findViewById(R.id.community_creater_user_image);
+        commImg = popUpAddComm.findViewById(R.id.community_img);
+        commAddBtn = popUpAddComm.findViewById(R.id.comm_add);
+        commProg = popUpAddComm.findViewById(R.id.comm_progressBar);
+
+        Glide.with(MainActivity.this).load(currentUser.getPhotoUrl())
+                .into(commUserImg);
+
+        commAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commAddBtn.setVisibility(View.INVISIBLE);
+                commProg.setVisibility(View.VISIBLE);
+
+                if (!commName.getText().toString().isEmpty()
+                        && !commDesc.getText().toString().isEmpty()
+                        && pickedImgUri !=null){
+                    StorageReference storageReference = FirebaseStorage.getInstance()
+                            .getReference()
+                            .child("image_posts");
+                    final StorageReference imageFilePath = storageReference
+                            .child(pickedImgUri.getLastPathSegment());
+                    imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String imgDownloadLink =uri.toString();
+                                    group_intro groupIntro = new group_intro(
+                                            commName.getText().toString(),
+                                            commDesc.getText().toString(),
+                                            imgDownloadLink,
+                                            currentUser.getUid(),
+                                            currentUser.getPhotoUrl().toString()
+                                    );
+
+                                    addComm(groupIntro);
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            showMessage(e.getMessage());
+                            commAddBtn.setVisibility(View.VISIBLE);
+                            commProg.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+                }
+                else {
+                    showMessage("Please fill all required fields");
+                    popUpAddBtn.setVisibility(View.VISIBLE);
+                    popUpClickProgress.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void addComm(group_intro groupIntro) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Communities").push();
+
+//        get post unique id and  update post key
+        String key = myRef.getKey();
+        groupIntro.setPostKey(key);
+
+        myRef.setValue(groupIntro).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                showMessage("Community added successfully");
+                commProg.setVisibility(View.INVISIBLE);
+                commAddBtn.setVisibility(View.VISIBLE);
+                popUpAddComm.dismiss();
+            }
+        });
+    }
 
 
     //      to set up image in popup post
@@ -202,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
             pickedImgUri = data.getData();
             popUpPostImage.setImageURI(pickedImgUri);
+            commImg.setImageURI(pickedImgUri);
 
         }
     }
@@ -223,7 +343,8 @@ public class MainActivity extends AppCompatActivity {
         popUpClickProgress = popUpAddPost.findViewById(R.id.popup_progressBar);
 
 //        user profile pic
-        Glide.with(MainActivity.this).load(currentUser.getPhotoUrl()).into(popUpUserImage);
+        Glide.with(MainActivity.this).load(currentUser.getPhotoUrl())
+                .into(popUpUserImage);
 
 
 //        post click listener
@@ -240,11 +361,13 @@ public class MainActivity extends AppCompatActivity {
                     StorageReference storageReference = FirebaseStorage.getInstance()
                             .getReference()
                             .child("image_posts");
-                    final StorageReference imageFilePath = storageReference.child(pickedImgUri.getLastPathSegment());
+                    final StorageReference imageFilePath = storageReference
+                            .child(pickedImgUri.getLastPathSegment());
                     imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(
+                                    new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     String imgDownloadLink = uri.toString();
@@ -313,12 +436,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+
         }
     }
 
     private void selectItem(int position) {
         Fragment fragment = null;
-
         switch (position){
             case 0:
                 fragment = new calendar_fragment();
@@ -330,6 +453,10 @@ public class MainActivity extends AppCompatActivity {
 
             case 2:
                 fragment = new fragment_homePage();
+                break;
+
+            case 3:
+                fragment = new groupFragment();
                 break;
 
             default:

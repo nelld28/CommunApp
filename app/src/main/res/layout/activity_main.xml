@@ -59,13 +59,12 @@
         <LinearLayout
             android:id="@+id/container_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/toolbar"
-                />
+                layout="@layout/toolbar" />
 
 
             <FrameLayout
@@ -74,19 +73,36 @@
                 android:layout_height="550dp">
 
 
-
             </FrameLayout>
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:clickable="true"
-                android:focusable="true"
-                app:srcCompat="@drawable/add_circle"
-                android:layout_marginEnd="8dp"/>
+                android:orientation="horizontal">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:srcCompat="@drawable/add_circle"
+                    android:background="@color/purple_700"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_comm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:srcCompat="@drawable/group_add" />
+            </LinearLayout>
+
+
 
 
         </LinearLayout>

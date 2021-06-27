@@ -29,7 +29,7 @@ public class homePage extends FirebaseRecyclerAdapter<group_intro, homePage.grou
     @Override
     protected void onBindViewHolder(@NonNull homePage.group_introViewHolder holder, int position, @NonNull group_intro model) {
 
-        holder.card_group_name.setText(model.getGroupName());
+
     }
 
     @NonNull

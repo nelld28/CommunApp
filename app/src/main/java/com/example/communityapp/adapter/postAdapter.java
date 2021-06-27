@@ -1,5 +1,6 @@
 package com.example.communityapp.adapter;
 
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -54,6 +57,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
         TextView tcTitle;
         ImageView postImg, imgPostProfile;
 
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -78,6 +82,10 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                     mContext.startActivity(postDetailAct);
                 }
             });
+
+
+            
+
         }
     }
 }

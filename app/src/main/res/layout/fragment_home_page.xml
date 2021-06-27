@@ -25,6 +25,7 @@
         android:layout_below="@+id/fab_group"
         tools:listitem="@layout/row_post_list"/>
 
+
     <!--    group Recycler view-->
 <!--    <androidx.recyclerview.widget.RecyclerView-->
 <!--        android:id="@+id/group_recycler_view"-->
