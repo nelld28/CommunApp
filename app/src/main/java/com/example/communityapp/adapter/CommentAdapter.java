@@ -73,3 +73,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return date;
     }
 }
+
+//https://www.youtube.com/watch?v=N3DhFb3hK3s
+//for delete

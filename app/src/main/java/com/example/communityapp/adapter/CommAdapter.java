@@ -2,19 +2,24 @@ package com.example.communityapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -42,6 +47,7 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
                 .setText(mData
                         .get(position)
                         .getCommName());
+
         Glide.with(mContext).load(mData.get(position).getCommImg()).into(holder.ctImg);
         Glide.with(mContext).load(mData.get(position).getCommUserImg()).into(holder.ctUserImg);
 
@@ -56,8 +62,10 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
+
         TextView communityName;
         ImageView ctImg, ctUserImg;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,12 +74,6 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
             ctImg = itemView.findViewById(R.id.card_group_img);
             ctUserImg = itemView.findViewById(R.id.commmunity_creator_img);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    
-                }
-            });
 
         }
     }

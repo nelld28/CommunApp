@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     Dialog popUpAddComm;
     private TextView commName, commDesc;
-    private ImageView commImg, commUserImg, commAddBtn;
+    private ImageView commImg,  commAddBtn;
+    private ImageView commUserImg;
     ProgressBar commProg;
 
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("tag", "onCreate: " + firebaseAuth.getCurrentUser().getEmail() +firebaseAuth.getCurrentUser().getDisplayName());
 
-        mTitle = mDrawerTitle =getTitle();
+        mTitle = mDrawerTitle = getTitle();
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.left_drawer);

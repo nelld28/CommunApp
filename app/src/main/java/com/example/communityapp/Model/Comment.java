@@ -3,10 +3,18 @@ package com.example.communityapp.Model;
 import com.google.firebase.database.ServerValue;
 
 public class Comment {
-    private String content, uid, uimg, uname;
+    private String content, uid, uimg, uname, postKey;
     private Object timestamp;
 
     public Comment() {
+    }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
     }
 
     public Comment(String content, String uid, String uimg, String uname) {

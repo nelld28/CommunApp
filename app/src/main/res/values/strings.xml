@@ -19,15 +19,15 @@
     <string name="nav_header_subtitle">navigation subtitle</string>
     <string name="nav_header_title">nav header title</string>
     <string name="card_group_name">Group Name</string>
-    <string name="admin_name">Admin</string>
+    <string name="admin_name">Admin Name</string>
     <string name="group_name">Group Name</string>
 
     <!--    navigation items-->
     <string-array name="navigation_drawer_items_array">
         <item>Calendar</item>
         <item>Location</item>
-        <item>Logout</item>
-        <item>HomePage</item>
+        <item>HopePage</item>
+        <item>Community</item>
     </string-array>
 
 </resources>

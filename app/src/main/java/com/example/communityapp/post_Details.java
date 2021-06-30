@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Comment;
+import com.example.communityapp.Model.Post;
 import com.example.communityapp.R;
 import com.example.communityapp.adapter.CommentAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,15 +37,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class post_Details extends AppCompatActivity {
 
     ImageView imgPost, imgUserPost, imgCurrentUser;
     TextView txtPostDesc, txtPostDateName, txtPostTitle;
     EditText editTextComment;
-    Button addCommentBtn;
+    Button addCommentBtn, editPostBtn;
     String post_Key;
 
     FirebaseAuth firebaseAuth;
@@ -52,6 +58,7 @@ public class post_Details extends AppCompatActivity {
     CommentAdapter commentAdapter;
     List<Comment> listComment;
     static  String COMMENT_KEY = "Comment";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +80,13 @@ public class post_Details extends AppCompatActivity {
         editTextComment = findViewById(R.id.post_detail_comment);
         addCommentBtn = findViewById(R.id.add_comment_btn);
 
+//        to edit post
+        editPostBtn = findViewById(R.id.Edit_post);
+
         firebaseAuth = FirebaseAuth.getInstance();
         fbUser = firebaseAuth.getCurrentUser();
         fbDatabase = FirebaseDatabase.getInstance();
+
 
         addCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +116,7 @@ public class post_Details extends AppCompatActivity {
             }
         });
 
+
         String postImage = getIntent().getExtras().getString("postImage");
         Glide.with(this).load(postImage).into(imgPost);
 
@@ -127,7 +139,16 @@ public class post_Details extends AppCompatActivity {
 
         inRVComment();
 
+        editPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
+
+
 
     private void inRVComment() {
         CommentRV.setLayoutManager(new LinearLayoutManager(this));
@@ -140,6 +161,7 @@ public class post_Details extends AppCompatActivity {
                 for (DataSnapshot snap:snapshot.getChildren()){
                     Comment comment = snap.getValue(Comment.class);
                     listComment.add(comment);
+
                 }
 
                 commentAdapter = new CommentAdapter(getApplicationContext(), listComment);
@@ -151,6 +173,8 @@ public class post_Details extends AppCompatActivity {
 
             }
         });
+
+
     }
 
 

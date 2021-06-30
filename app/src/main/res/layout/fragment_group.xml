@@ -6,11 +6,21 @@
     tools:context=".fragment.groupFragment">
 
 
+    <TextView
+        android:id="@+id/curren_ser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:textSize="50sp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/community_groupRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/list_card_row"
+        android:layout_below="@+id/curren_ser"
         />
+
+
 
 </RelativeLayout>

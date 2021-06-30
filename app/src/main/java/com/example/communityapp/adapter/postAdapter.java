@@ -1,11 +1,15 @@
 package com.example.communityapp.adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +19,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.communityapp.MainActivity;
 import com.example.communityapp.Model.Post;
 import com.example.communityapp.R;
 import com.example.communityapp.post_Details;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -46,6 +53,9 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
         holder.tcTitle.setText(mData.get(position).getTitle());
         Glide.with(mContext).load(mData.get(position).getPicture()).into(holder.postImg);
         Glide.with(mContext).load(mData.get(position).getUserPhoto()).into(holder.imgPostProfile);
+
+
+
     }
 
     @Override
@@ -56,6 +66,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tcTitle;
         ImageView postImg, imgPostProfile;
+
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -83,9 +94,36 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                 }
             });
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
 
-            
+                    DatabaseReference delRef = FirebaseDatabase.getInstance()
+                            .getReference().child("Posts").child(mData.get(position).getPostKey());
+                    delRef.removeValue();
+
+
+                    notifyItemRemoved(getAdapterPosition());
+
+                    Toast.makeText(mContext.getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+
+                    return true;
+                }
+            });
+
+
 
         }
     }
+//
+//    private void removeFromFirebase() {
+//
+//        DatabaseReference delRef = FirebaseDatabase.getInstance().getReference("Posts");
+//        delRef.getKey().
+//
+//
+//    }
+
+
 }

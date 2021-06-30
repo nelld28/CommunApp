@@ -45,8 +45,6 @@ public class fragment_homePage extends Fragment {
 
     View rootview;
 
-//    floating action button for adding community
-    private FloatingActionButton fab_g;
 
     private CardView groupCard;
 
@@ -84,6 +82,7 @@ public class fragment_homePage extends Fragment {
                 postList = new ArrayList<>();
                 for (DataSnapshot postsnap : snapshot.getChildren()){
                     Post post = postsnap.getValue(Post.class);
+                    post.setPostKey(postsnap.getKey());
                     postList.add(post);
 
                 }
@@ -96,7 +95,10 @@ public class fragment_homePage extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
+
+
     }
 
     @Override
@@ -111,19 +113,6 @@ public class fragment_homePage extends Fragment {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        fab_g = rootview.findViewById(R.id.fab_group);
-
-        fab_g.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.homePage_frag, add_group_intro.newInstance())
-                        .commitNow();
-            }
-        });
-        // end of fab
 
         RVdatabaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -132,6 +121,12 @@ public class fragment_homePage extends Fragment {
         postRV.setHasFixedSize(true);
         fbDatabase = FirebaseDatabase.getInstance();
         RVdatabaseReference = fbDatabase.getReference("Posts");
+
+
+        FirebaseRecyclerOptions<Post> options = new FirebaseRecyclerOptions.Builder<Post>()
+                .setQuery(RVdatabaseReference, Post.class)
+                .build();
+
 
 
 

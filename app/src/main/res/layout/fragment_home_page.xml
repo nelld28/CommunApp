@@ -6,23 +6,11 @@
     android:id="@+id/homePage_frag">
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/add_circle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postRV_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/fab_group"
         tools:listitem="@layout/row_post_list"/>
 
 

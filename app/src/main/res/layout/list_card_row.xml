@@ -54,8 +54,6 @@
             android:layout_gravity="top|end"/>
 
 
-
-
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

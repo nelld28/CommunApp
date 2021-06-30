@@ -47,7 +47,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class add_group_intro extends Fragment {
 
     private TextView commName, commDesc;
-    private ImageView commImg, commUserImg, commAddBtn;
+    private ImageView commImg, commUserImg, commAddBtn, commLName;
     ProgressBar commProg;
 
     private static int PReqCode = 2;

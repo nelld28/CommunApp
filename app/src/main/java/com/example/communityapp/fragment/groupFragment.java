@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.R;
 import com.example.communityapp.adapter.CommAdapter;
@@ -48,6 +50,8 @@ public class groupFragment extends Fragment {
     List<group_intro> commList;
 
     FirebaseUser currentUser;
+//    String currentUserId, commUserId;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -117,6 +121,7 @@ public class groupFragment extends Fragment {
         commRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         commRV.setHasFixedSize(true);
         databaseReferenceRV = firebaseDatabaseRV.getReference("Communities");
+
 
 
         return rootview;

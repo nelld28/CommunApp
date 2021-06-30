@@ -2,6 +2,9 @@ package com.example.communityapp.Model;
 
 import com.google.firebase.database.ServerValue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Post {
 
     private String postKey;
@@ -11,6 +14,7 @@ public class Post {
     private String userId;
     private String userPhoto;
     private Object timeStamp;
+//    public Map<String, Boolean> postList =new HashMap<>();
 
 
     public Post(String title, String description, String picture, String userId, String userPhoto) {
@@ -21,6 +25,23 @@ public class Post {
         this.userPhoto = userPhoto;
         this.timeStamp = ServerValue.TIMESTAMP;
     }
+
+//    public Post(String id, String title, String description, String userId) {
+//    }
+
+//    public Map<String, Object> toMap(){
+//        HashMap<String, Object> result = new HashMap<>();
+//        result.put("postKey", postKey);
+//        result.put("title", title);
+//        result.put("description", description);
+//        result.put("picture", picture);
+//        result.put("userId", userId);
+//        result.put("userPhoto", userPhoto);
+//        result.put("timeStamp", timeStamp);
+//
+//        return result;
+//    }
+
 
     public Post() {
     }
@@ -80,4 +101,6 @@ public class Post {
     public void setTimeStamp(Object timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+
 }
