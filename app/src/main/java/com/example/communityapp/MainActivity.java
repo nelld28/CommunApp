@@ -35,6 +35,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Post;
 import com.example.communityapp.Model.group_intro;
+import com.example.communityapp.fragment.NotifFragment;
 import com.example.communityapp.fragment.fragment_homePage;
 import com.example.communityapp.fragment.groupFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         DataModel[] drawerItem = new DataModel[4];
 
         drawerItem[0] = new DataModel(R.drawable.calendar_dra, "calendar");
-        drawerItem[1] = new DataModel(R.drawable.com_loc, "location");
+        drawerItem[1] = new DataModel(R.drawable.com_loc, "notif");
         drawerItem[2] = new DataModel(R.drawable.ic_home, "homepage");
         drawerItem[3] = new DataModel(R.drawable.group_add, "Community");
 
@@ -185,8 +186,10 @@ public class MainActivity extends AppCompatActivity {
     private void popUpComm() {
         popUpAddComm = new Dialog(this);
         popUpAddComm.setContentView(R.layout.fragment_add_group_intro2);
-        popUpAddComm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popUpAddComm.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        popUpAddComm.getWindow().setBackgroundDrawable(new ColorDrawable(Color
+                .TRANSPARENT));
+        popUpAddComm.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,
+                Toolbar.LayoutParams.WRAP_CONTENT);
         popUpAddComm.getWindow().getAttributes().gravity = Gravity.TOP;
 
         commName = popUpAddComm.findViewById(R.id.community_name);
@@ -449,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case 1:
-                fragment = new groupFragment();
+                fragment = new NotifFragment();
                 break;
 
             case 2:

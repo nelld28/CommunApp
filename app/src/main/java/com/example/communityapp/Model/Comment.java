@@ -9,20 +9,13 @@ public class Comment {
     public Comment() {
     }
 
-    public String getPostKey() {
-        return postKey;
-    }
 
-    public void setPostKey(String postKey) {
-        this.postKey = postKey;
-    }
 
     public Comment(String content, String uid, String uimg, String uname) {
         this.content = content;
         this.uid = uid;
         this.uimg = uimg;
         this.uname = uname;
-
         this.timestamp = ServerValue.TIMESTAMP;
     }
 
@@ -33,6 +26,8 @@ public class Comment {
         this.uname = uname;
         this.timestamp = timestamp;
     }
+
+
 
     public String getContent() {
         return content;
@@ -72,5 +67,13 @@ public class Comment {
 
     public void setTimestamp(Object timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
     }
 }

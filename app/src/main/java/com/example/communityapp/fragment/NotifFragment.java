@@ -1,14 +1,33 @@
 package com.example.communityapp.fragment;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.communityapp.Model.Note;
 import com.example.communityapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +35,19 @@ import com.example.communityapp.R;
  * create an instance of this fragment.
  */
 public class NotifFragment extends Fragment {
+
+    Dialog popNotif;
+    private TextView comName, inNum, recNum, matReq;
+    private RadioButton lowButton, medButton, highButton;
+    private ImageView addNotifBtn;
+
+    FloatingActionButton addnewNotif;
+
+    FirebaseAuth firebaseAuth;
+    FirebaseUser currentUser;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference nRef;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +93,13 @@ public class NotifFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notif, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_notif, container, false);
+
+
+
+
+        return rootview;
     }
+
+
 }

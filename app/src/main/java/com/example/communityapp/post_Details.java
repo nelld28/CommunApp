@@ -99,6 +99,9 @@ public class post_Details extends AppCompatActivity {
                 String uimg = fbUser.getPhotoUrl().toString();
                 Comment comment = new Comment(comment_content, uid, uimg, uname);
 
+                String key = commentRef.getKey();
+                comment.setPostKey(key);
+
                 commentRef.setValue(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -117,6 +120,8 @@ public class post_Details extends AppCompatActivity {
         });
 
 
+
+
         String postImage = getIntent().getExtras().getString("postImage");
         Glide.with(this).load(postImage).into(imgPost);
 
@@ -129,6 +134,8 @@ public class post_Details extends AppCompatActivity {
        String postDescription = getIntent().getExtras().getString("description");
        txtPostDesc.setText(postDescription);
 
+       String postUserID = getIntent().getExtras().getString("userId");
+
 //       setting commenting user image
         Glide.with(this).load(fbUser.getPhotoUrl()).into(imgCurrentUser);
 
@@ -139,12 +146,21 @@ public class post_Details extends AppCompatActivity {
 
         inRVComment();
 
-        editPostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        String fbUserid = fbUser.getUid();
 
-            }
-        });
+        if (fbUserid.equals(postUserID)){
+            editPostBtn.setVisibility(View.VISIBLE);
+            editPostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+        else {
+            editPostBtn.setVisibility(View.INVISIBLE);
+        }
+
 
     }
 
@@ -160,6 +176,7 @@ public class post_Details extends AppCompatActivity {
                 listComment = new ArrayList<>();
                 for (DataSnapshot snap:snapshot.getChildren()){
                     Comment comment = snap.getValue(Comment.class);
+                    comment.setPostKey(snap.getKey());
                     listComment.add(comment);
 
                 }
@@ -173,6 +190,7 @@ public class post_Details extends AppCompatActivity {
 
             }
         });
+
 
 
     }

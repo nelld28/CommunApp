@@ -25,7 +25,7 @@
     <!--    navigation items-->
     <string-array name="navigation_drawer_items_array">
         <item>Calendar</item>
-        <item>Location</item>
+        <item>Notification</item>
         <item>HopePage</item>
         <item>Community</item>
     </string-array>

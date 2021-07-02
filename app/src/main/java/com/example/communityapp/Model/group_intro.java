@@ -18,7 +18,6 @@ public class group_intro {
     }
 
     public group_intro() {
-
     }
 
     public String getCommName() {

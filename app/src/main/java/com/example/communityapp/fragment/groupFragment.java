@@ -91,6 +91,7 @@ public class groupFragment extends Fragment {
                 commList = new ArrayList<>();
                 for (DataSnapshot commSnap : snapshot.getChildren()){
                     group_intro group = commSnap.getValue(group_intro.class);
+                    group.setPostKey(commSnap.getKey());
                     commList.add(group);
                 }
 
@@ -121,7 +122,6 @@ public class groupFragment extends Fragment {
         commRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         commRV.setHasFixedSize(true);
         databaseReferenceRV = firebaseDatabaseRV.getReference("Communities");
-
 
 
         return rootview;

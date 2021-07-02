@@ -23,8 +23,14 @@ import com.example.communityapp.MainActivity;
 import com.example.communityapp.Model.Post;
 import com.example.communityapp.R;
 import com.example.communityapp.post_Details;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -32,6 +38,9 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
 
     Context mContext;
     List<Post> mData;
+
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
     public postAdapter(Context mContext, List<Post> mData) {
         this.mContext = mContext;
@@ -53,8 +62,6 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
         holder.tcTitle.setText(mData.get(position).getTitle());
         Glide.with(mContext).load(mData.get(position).getPicture()).into(holder.postImg);
         Glide.with(mContext).load(mData.get(position).getUserPhoto()).into(holder.imgPostProfile);
-
-
 
     }
 
@@ -87,6 +94,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                     postDetailAct.putExtra("description", mData.get(position).getDescription());
                     postDetailAct.putExtra("postKey", mData.get(position).getPostKey());
                     postDetailAct.putExtra("userPhoto", mData.get(position).getUserPhoto());
+                    postDetailAct.putExtra("userId", mData.get(position).getUserId());
 //                    postDetailAct.putExtra("userName", mData.get(position).getUser);
                     long timestamp = (long) mData.get(position).getTimeStamp();
                     postDetailAct.putExtra("postDate", timestamp);
@@ -94,19 +102,32 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                 }
             });
 
+//            To delete the post
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     int position = getAdapterPosition();
 
-                    DatabaseReference delRef = FirebaseDatabase.getInstance()
-                            .getReference().child("Posts").child(mData.get(position).getPostKey());
-                    delRef.removeValue();
+                    String postId = mData.get(position).getUserId();
+
+                    String id = currentUser.getUid();
 
 
-                    notifyItemRemoved(getAdapterPosition());
+                    if (id.equals(postId)){
+                        DatabaseReference delRef = FirebaseDatabase.getInstance()
+                                .getReference().child("Posts").child(mData.get(position).getPostKey());
+                        delRef.removeValue();
 
-                    Toast.makeText(mContext.getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                        notifyItemRemoved(getAdapterPosition());
+
+                        Toast.makeText(mContext.getApplicationContext(), "Post Deleted" , Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    else {
+                        Toast.makeText(mContext.getApplicationContext(), "Not allowed", Toast.LENGTH_SHORT).show();
+                    }
+
 
                     return true;
                 }
@@ -114,16 +135,10 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
 
 
 
+
         }
     }
-//
-//    private void removeFromFirebase() {
-//
-//        DatabaseReference delRef = FirebaseDatabase.getInstance().getReference("Posts");
-//        delRef.getKey().
-//
-//
-//    }
+
 
 
 }
