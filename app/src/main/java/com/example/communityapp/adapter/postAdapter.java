@@ -110,6 +110,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
 
                     String postId = mData.get(position).getUserId();
 
+
                     String id = currentUser.getUid();
 
 
@@ -132,6 +133,8 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                     return true;
                 }
             });
+
+
 
 
 

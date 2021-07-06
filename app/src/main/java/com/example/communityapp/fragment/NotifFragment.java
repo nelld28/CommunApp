@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,13 +23,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Note;
 import com.example.communityapp.R;
+import com.example.communityapp.adapter.NotifAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,67 +45,79 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class NotifFragment extends Fragment {
 
-    Dialog popNotif;
-    private TextView comName, inNum, recNum, matReq;
-    private RadioButton lowButton, medButton, highButton;
-    private ImageView addNotifBtn;
-
-    FloatingActionButton addnewNotif;
-
+    View rootview;
     FirebaseAuth firebaseAuth;
     FirebaseUser currentUser;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference nRef;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView notifRV;
+    NotifAdapter notifAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    List<Note> notesList;
+
 
     public NotifFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotifFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static NotifFragment newInstance(String param1, String param2) {
-        NotifFragment fragment = new NotifFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+        return new NotifFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        nRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                notesList = new ArrayList<>();
+                for (DataSnapshot nSnap : snapshot.getChildren()){
+                    Note note = nSnap.getValue(Note.class);
+                    note.setPostKey(nSnap.getKey());
+                    notesList.add(note);
+                }
+                notifAdapter = new NotifAdapter(getActivity(), notesList);
+                notifRV.setAdapter(notifAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_notif, container, false);
+        rootview = inflater.inflate(R.layout.fragment_notif, container, false);
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        nRef = FirebaseDatabase.getInstance().getReference();
 
-
+        notifRV = rootview.findViewById(R.id.notif_RV);
+        notifRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+        notifRV.setHasFixedSize(true);
+        nRef = firebaseDatabase.getReference("Notifs");
 
         return rootview;
     }

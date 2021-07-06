@@ -21,12 +21,13 @@
     <string name="card_group_name">Group Name</string>
     <string name="admin_name">Admin Name</string>
     <string name="group_name">Group Name</string>
+    <string name="nl_comm_name">Community Name</string>
 
     <!--    navigation items-->
     <string-array name="navigation_drawer_items_array">
         <item>Calendar</item>
         <item>Notification</item>
-        <item>HopePage</item>
+        <item>HomePage</item>
         <item>Community</item>
     </string-array>
 

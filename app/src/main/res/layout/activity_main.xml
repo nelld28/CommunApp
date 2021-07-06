@@ -19,8 +19,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="end">
+            android:layout_gravity="end"
+            android:background="#E1E4F8"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/admin_button"
@@ -29,8 +30,16 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/logut_button_bg"
                 android:clickable="true"
+                android:src="@drawable/admin_img"
+                android:text="Admin" />
+
+            <ImageView
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/logut_button_bg"
                 android:onClick="logout"
-                android:src="@drawable/login_logo"
+                android:src="@drawable/ic_baseline_exit"
                 android:text="@string/logout" />
 
             <TextView
@@ -38,21 +47,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:text="@string/app_name"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
-            <ImageView
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logout"
-                android:onClick="logout"
-                android:background="@drawable/logut_button_bg"
-                android:src="@drawable/ic_baseline_exit"
-                />
+
         </LinearLayout>
 
 
@@ -64,7 +65,10 @@
 
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
+                layout="@layout/toolbar"
+
+
+                android:background="#FFFFFF" />
 
 
             <FrameLayout

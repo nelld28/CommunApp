@@ -76,8 +76,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             tv_content = itemView.findViewById(R.id.comment_content);
             tv_date = itemView.findViewById(R.id.comment_date);
 
-
-
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -88,14 +86,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     String id = currentUser.getUid();
 
                     if (id.equals(commentId)){
-                        DatabaseReference delComment = FirebaseDatabase.getInstance()
-                                .getReference()
-                                .child("Comment")
-                                .child(mData.get(position).getPostKey());
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference delComment = firebaseDatabase
+                                .getReference().child("Comment").child(mData.get(position).getPostKey());
                         delComment.removeValue();
 
-
-                        notifyItemRemoved(position);
+                        notifyItemRemoved(getAdapterPosition());
 
                         Toast.makeText(mContext.getApplicationContext(), "Comment Deleted" +mData.get(position).getPostKey() , Toast.LENGTH_SHORT).show();
 

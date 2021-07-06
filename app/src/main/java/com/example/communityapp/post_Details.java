@@ -27,6 +27,7 @@ import com.example.communityapp.R;
 import com.example.communityapp.adapter.CommentAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -81,7 +82,7 @@ public class post_Details extends AppCompatActivity {
         addCommentBtn = findViewById(R.id.add_comment_btn);
 
 //        to edit post
-        editPostBtn = findViewById(R.id.Edit_post);
+//        editPostBtn = findViewById(R.id.Edit_post);
 
         firebaseAuth = FirebaseAuth.getInstance();
         fbUser = firebaseAuth.getCurrentUser();
@@ -119,9 +120,6 @@ public class post_Details extends AppCompatActivity {
             }
         });
 
-
-
-
         String postImage = getIntent().getExtras().getString("postImage");
         Glide.with(this).load(postImage).into(imgPost);
 
@@ -148,22 +146,27 @@ public class post_Details extends AppCompatActivity {
 
         String fbUserid = fbUser.getUid();
 
-        if (fbUserid.equals(postUserID)){
-            editPostBtn.setVisibility(View.VISIBLE);
-            editPostBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
-        else {
-            editPostBtn.setVisibility(View.INVISIBLE);
-        }
+//        if (fbUserid.equals(postUserID)){
+//            editPostBtn.setVisibility(View.VISIBLE);
+//            editPostBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    updatePost();
+//                }
+//            });
+//        }
+//
+//        else {
+//            editPostBtn.setVisibility(View.INVISIBLE);
+//        }
 
 
     }
 
+    private void updatePost() {
+
+    }
 
 
     private void inRVComment() {

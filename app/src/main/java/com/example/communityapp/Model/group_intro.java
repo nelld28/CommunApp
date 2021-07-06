@@ -1,5 +1,7 @@
 package com.example.communityapp.Model;
 
+import java.util.HashMap;
+
 public class group_intro {
 
     private String commName;
@@ -8,6 +10,15 @@ public class group_intro {
     private String commUserId;
     private String commUserImg;
     private String postKey;
+
+
+
+    private String MemberIdKey;
+
+
+
+    private HashMap<String, String> Members;
+
 
     public group_intro(String commName, String commDesc, String commImg, String commUserId, String commUserImg) {
         this.commName = commName;
@@ -67,4 +78,21 @@ public class group_intro {
     public void setPostKey(String postKey) {
         this.postKey = postKey;
     }
+
+    public HashMap<String, String> getMembers() {
+        return Members;
+    }
+
+    public void setMembers(HashMap<String, String> members) {
+        Members = members;
+    }
+
+    public String getMemberIdKey() {
+        return MemberIdKey;
+    }
+
+    public void setMemberIdKey(String memberIdKey) {
+        MemberIdKey = memberIdKey;
+    }
+
 }

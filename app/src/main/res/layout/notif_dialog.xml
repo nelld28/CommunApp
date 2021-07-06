@@ -23,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/in_Num" />
 
     <EditText
-        android:id="@+id/rec_Num"
+        android:id="@+id/nRec_Num"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -99,7 +99,7 @@
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rec_Num" />
+        app:layout_constraintTop_toBottomOf="@+id/nRec_Num" />
 
     <EditText
         android:id="@+id/mat_Req"

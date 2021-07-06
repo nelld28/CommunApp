@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.communityapp.Model.Members;
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.R;
 import com.example.communityapp.adapter.CommAdapter;
@@ -43,25 +44,20 @@ public class groupFragment extends Fragment {
 
     FirebaseDatabase firebaseDatabaseRV;
     DatabaseReference databaseReferenceRV;
+//    DatabaseReference databaseReferenceRVM;
 
     private RecyclerView commRV;
     CommAdapter commAdapter;
 
     List<group_intro> commList;
+//    List<Members> memList;
 
     FirebaseUser currentUser;
 //    String currentUserId, commUserId;
 
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public groupFragment() {
         // Required empty public constructor
@@ -93,17 +89,36 @@ public class groupFragment extends Fragment {
                     group_intro group = commSnap.getValue(group_intro.class);
                     group.setPostKey(commSnap.getKey());
                     commList.add(group);
+
+
                 }
 
                 commAdapter = new CommAdapter(getActivity(), commList);
                 commRV.setAdapter(commAdapter);
             }
 
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+//        databaseReferenceRVM.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                memList = new ArrayList<>();
+//                for (DataSnapshot memSnap : snapshot.getChildren()){
+//                    Members member = memSnap.getValue(Members.class);
+//                    member.setPostKey();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -118,11 +133,14 @@ public class groupFragment extends Fragment {
         firebaseDatabaseRV = FirebaseDatabase.getInstance();
         databaseReferenceRV = firebaseDatabaseRV.getReference();
 
+
         commRV = rootview.findViewById(R.id.community_groupRV);
         commRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         commRV.setHasFixedSize(true);
         databaseReferenceRV = firebaseDatabaseRV.getReference("Communities");
+//         databaseReferenceRVM= databaseReferenceRV.child("Members");
 
+        currentUser.getUid();
 
         return rootview;
     }

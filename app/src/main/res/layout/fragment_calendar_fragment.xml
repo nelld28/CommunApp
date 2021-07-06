@@ -1,8 +1,8 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical">
 
 
@@ -11,34 +11,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="110dp"
         android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
-        android:layout_marginStart="120dp"
         android:text="Calendar"
         android:textSize="45dp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_marginStart="50dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_calendar">
-
-        <CalendarView
-            android:id="@+id/event_cal"
-            android:layout_width="wrap_content"
-            android:layout_height="320dp"
-            />
+        android:layout_marginStart="50dp"
+        android:background="@drawable/bg_calendar"
+        android:orientation="vertical">
 
 
+        <EditText
+            android:id="@+id/cal_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Event Title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/cal_Loc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Event Location"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/cal_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="event description"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/call_add_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/purple_200"/>
 
 </LinearLayout>

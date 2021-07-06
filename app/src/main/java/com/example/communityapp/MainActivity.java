@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
 //        Content titles to be navigated
         DataModel[] drawerItem = new DataModel[4];
 
-        drawerItem[0] = new DataModel(R.drawable.calendar_dra, "calendar");
-        drawerItem[1] = new DataModel(R.drawable.com_loc, "notif");
-        drawerItem[2] = new DataModel(R.drawable.ic_home, "homepage");
+        drawerItem[0] = new DataModel(R.drawable.calendar_dra, "Calendar");
+        drawerItem[1] = new DataModel(R.drawable.com_loc, "Notification");
+        drawerItem[2] = new DataModel(R.drawable.ic_home, "Homepage");
         drawerItem[3] = new DataModel(R.drawable.group_add, "Community");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
