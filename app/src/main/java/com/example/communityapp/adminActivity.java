@@ -6,9 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
+import com.example.communityapp.Model.Post;
 import com.example.communityapp.Model.group_intro;
 import com.example.communityapp.adapter.CommAdapter;
+import com.example.communityapp.adapter.postAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,10 +31,27 @@ public class adminActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
+    RecyclerView postARV;
+    com.example.communityapp.adapter.postAdapter pAdapter;
+
+    List<Post> pList;
+    TextView postNameAd;
+
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        databaseReference.child("Post").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot snapshot) {
+
+            }
+        });
+
+
+
 
     }
 
@@ -39,14 +61,17 @@ public class adminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        databaseReference = firebaseDatabase.getReference("Posts");
+
+        postNameAd = findViewById(R.id.over_view_item);
+
+        postARV=findViewById(R.id.post_ad_rv);
+        postARV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        postARV.setHasFixedSize(true);
 
 
-
-
-
-
-
+//        String postTitle = getIntent().getExtras().getString("postTitle");
+//        postNameAd.setText(postTitle);
 
     }
 }

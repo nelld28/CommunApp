@@ -31,9 +31,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> {
     Context mContext;
@@ -112,6 +115,10 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
 
                     }
                     else {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("Communities")
+                                .child("Members");
                         Toast.makeText(mContext.getApplicationContext(), "No Delete allowed",
                                 Toast.LENGTH_SHORT).show();
 
@@ -133,93 +140,128 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
                     String commId = mData.get(position).getCommUserId();
 
 
-//                    HashMap<String, String> hm = mData.get(position).getMembers();
-//
-//                    Iterator myIterator =hm.keySet().iterator();
-//                    while (myIterator.hasNext()){
-//                        String key = (String) myIterator.next();
-//                        String value = (String)hm.get(key);
-////                                    Toast.makeText(mContext.getApplicationContext(), "key:"+ key + " "
-////                                            + "value:" +value, Toast.LENGTH_SHORT).show();
-//
-//                        Toast.makeText(mContext.getApplicationContext(), "" +hm.values().toString(), Toast.LENGTH_SHORT).show();
-//                    }
-
 
                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference coRef = firebaseDatabase.getReference("Communities");
 
                     DatabaseReference memRef = coRef.child("Members");
-                    memRef.child("MemberId").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    memRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot snapshot) {
                             int position = getAdapterPosition();
-                            memberId = mData.get(position).getMemberIdKey();
-                            Toast.makeText(mContext.getApplicationContext(), ""+memberId, Toast.LENGTH_SHORT).show();
+                            String cuUID1 = currentUser.getUid();
+                            memberId= String.valueOf(mData.get(position).getMembers());
+
+                            boolean mem = memberId.contains(cuUID1);
+                            Toast.makeText(mContext.getApplicationContext(), ""+ mem, Toast.LENGTH_SHORT).show();
+
+                            if (mem)
+                            {
+                                Intent groupDetail = new Intent(mContext, group_detail.class);
+
+                                groupDetail.putExtra("groupName", mData.get(position).getCommName());
+                                groupDetail.putExtra("groupDesc", mData.get(position).getCommDesc());
+                                groupDetail.putExtra("groupImg", mData.get(position).getCommImg());
+                                groupDetail.putExtra("groupCreatorId", mData.get(position).getCommUserId());
+                                groupDetail.putExtra("groupId", mData.get(position).getPostKey());
+
+                                mContext.startActivity(groupDetail);
+                            }
+                            else if (commId.equals(cuUID1)){
+                                Intent groupDetail = new Intent(mContext, group_detail.class);
+
+                                groupDetail.putExtra("groupName", mData.get(position).getCommName());
+                                groupDetail.putExtra("groupDesc", mData.get(position).getCommDesc());
+                                groupDetail.putExtra("groupImg", mData.get(position).getCommImg());
+                                groupDetail.putExtra("groupCreatorId", mData.get(position).getCommUserId());
+                                groupDetail.putExtra("groupId", mData.get(position).getPostKey());
+
+                                mContext.startActivity(groupDetail);
+                            }
+                            else
+                            {
+                                AlertDialog.Builder joinDialog = new AlertDialog.Builder(itemView.getContext());
+                                joinDialog.setMessage("Join Group?");
+                                joinDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        int position = getAdapterPosition();
+
+                                        String cUID = currentUser.getUid();
+
+//                            TO ADD MEMBER
+                                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                        DatabaseReference coRef = firebaseDatabase.getReference("Communities");
+
+                                        String coKey = mData.get(position).getPostKey();
+
+                                        coRef.child(coKey).child("Members").push().setValue(cUID);
+
+
+                                        Intent groupDetail = new Intent(mContext, group_detail.class);
+
+                                        groupDetail.putExtra("groupName", mData.get(position).getCommName());
+                                        groupDetail.putExtra("groupDesc", mData.get(position).getCommDesc());
+                                        groupDetail.putExtra("groupImg", mData.get(position).getCommImg());
+                                        groupDetail.putExtra("groupCreatorId", mData.get(position).getCommUserId());
+                                        groupDetail.putExtra("groupId", mData.get(position).getPostKey());
+
+                                        mContext.startActivity(groupDetail);
+
+
+
+                                    }
+                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                AlertDialog alertDialog = joinDialog.create();
+                                alertDialog.show();
+                            }
+
+
+
+
+
+
+//                            Iterator myIterator =hm.values().iterator();
+//                                while (myIterator.hasNext()) {
+//                                    String key = (String) myIterator.next();
+//                                    String value =  hm.get(key);
+//                                    Toast.makeText(mContext.getApplicationContext(), "key:"+ key + " "
+//                                            + "value:" +value, Toast.LENGTH_SHORT).show();
+
+//                                    if(key.equals(cuUID1)) {
+//                                        Toast.makeText(mContext.getApplicationContext(), "" + cuUID1, Toast.LENGTH_SHORT).show();
+//                                    }
+//                                    else{
+
+//                                    }
+
+
+
+//                                }
+
+
+
+//                            Toast.makeText(mContext.getApplicationContext(), "" + hm, Toast.LENGTH_SHORT).show();
                         }
                     });
 
 
-//                    AlertDialog.Builder joinDialog = new AlertDialog.Builder(itemView.getContext());
-//                        joinDialog.setMessage("Join Group?");
-//                        joinDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                                int position = getAdapterPosition();
-//
-//                                String cUID = currentUser.getUid();
-//
-////                            TO ADD MEMBER
-//                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//                            DatabaseReference coRef = firebaseDatabase.getReference("Communities");
-//
-//                            String coKey = mData.get(position).getPostKey();
-//
-//                            coRef.child(coKey).child("Members").child("MemberId").push().setValue(cUID);
-//
-////                            HashMap<String, String> hm = mData.get(position).getMembers();
-////
-////
-////                                Iterator myIterator =hm.keySet().iterator();
-////                                while (myIterator.hasNext()){
-////                                    String key = (String) myIterator.next();
-////                                    String value = (String)hm.get(key);
-//////                                    Toast.makeText(mContext.getApplicationContext(), "key:"+ key + " "
-//////                                            + "value:" +value, Toast.LENGTH_SHORT).show();
-////
-////                                    Toast.makeText(mContext.getApplicationContext(), "" +hm.values().toString(), Toast.LENGTH_SHORT).show();
-////                                }
-////
-////                                hm.containsKey(cUID);
-////
-////                           END OF ADDING MEMBER
-//
-//
-//                                Intent groupDetail = new Intent(mContext, group_detail.class);
-//
-//                                groupDetail.putExtra("groupName", mData.get(position).getCommName());
-//                                groupDetail.putExtra("groupDesc", mData.get(position).getCommDesc());
-//                                groupDetail.putExtra("groupImg", mData.get(position).getCommImg());
-//                                groupDetail.putExtra("groupCreatorId", mData.get(position).getCommUserId());
-//                                groupDetail.putExtra("groupId", mData.get(position).getPostKey());
-//
-//                                mContext.startActivity(groupDetail);
-//
-//
-//
-//                            }
-//                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                        AlertDialog alertDialog = joinDialog.create();
-//                        alertDialog.show();
 
-//                          END OF FIRST ALERTDIALOG
+
+
+
+
+
+
+
+
 
 
 //                    Toast.makeText(mContext.getApplicationContext(), ""+ memberId, Toast.LENGTH_SHORT).show();
@@ -237,7 +279,7 @@ public class CommAdapter extends RecyclerView.Adapter<CommAdapter.MyViewHolder> 
 //
 //                    }
 //                    else{
-//                        //                    START OF ALERT DIALOG
+//                        //                     START OF ALERT DIALOG
 //                        AlertDialog.Builder joinDialog = new AlertDialog.Builder(itemView.getContext());
 //                        joinDialog.setMessage("Join Group?");
 //                        joinDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

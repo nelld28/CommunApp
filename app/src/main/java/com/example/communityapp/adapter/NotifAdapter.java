@@ -103,11 +103,6 @@ public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.MyViewHolder
 
 
 
-//            nMatRec.setBackgroundColor(Color.GREEN);
-
-
-//            Toast.makeText(nContext.getApplicationContext(), "" +priorityType, Toast.LENGTH_SHORT).show();
-
 
 
         }

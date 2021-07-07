@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.communityapp.MainActivity;
 import com.example.communityapp.Model.Post;
 import com.example.communityapp.R;
+import com.example.communityapp.adminActivity;
 import com.example.communityapp.post_Details;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,6 +63,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
         holder.tcTitle.setText(mData.get(position).getTitle());
         Glide.with(mContext).load(mData.get(position).getPicture()).into(holder.postImg);
         Glide.with(mContext).load(mData.get(position).getUserPhoto()).into(holder.imgPostProfile);
+
 
     }
 
@@ -133,8 +135,6 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
                     return true;
                 }
             });
-
-
 
 
 

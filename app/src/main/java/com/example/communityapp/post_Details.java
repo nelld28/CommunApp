@@ -82,7 +82,7 @@ public class post_Details extends AppCompatActivity {
         addCommentBtn = findViewById(R.id.add_comment_btn);
 
 //        to edit post
-//        editPostBtn = findViewById(R.id.Edit_post);
+        editPostBtn = findViewById(R.id.Edit_post);
 
         firebaseAuth = FirebaseAuth.getInstance();
         fbUser = firebaseAuth.getCurrentUser();
@@ -146,27 +146,17 @@ public class post_Details extends AppCompatActivity {
 
         String fbUserid = fbUser.getUid();
 
-//        if (fbUserid.equals(postUserID)){
-//            editPostBtn.setVisibility(View.VISIBLE);
-//            editPostBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    updatePost();
-//                }
-//            });
-//        }
-//
-//        else {
-//            editPostBtn.setVisibility(View.INVISIBLE);
-//        }
+        if (fbUserid.equals(postUserID)){
+            editPostBtn.setVisibility(View.VISIBLE);
+        }
+
+        else {
+            editPostBtn.setVisibility(View.INVISIBLE);
+        }
 
 
     }
 
-    private void updatePost() {
-
-    }
 
 
     private void inRVComment() {
@@ -209,5 +199,10 @@ public class post_Details extends AppCompatActivity {
         calendar.setTimeInMillis(time);
         String date = DateFormat.format("dd-MM-yyyy", calendar).toString();
         return date;
+    }
+
+
+    public void updatePost(View view) {
+
     }
 }

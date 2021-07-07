@@ -53,9 +53,7 @@ public class fragment_homePage extends Fragment {
         return new fragment_homePage();
     }
 
-//    Recycler view
-//    private RecyclerView recyclerView;
-//    homePage homePageAdapter;
+
 
     FirebaseDatabase fbDatabase;
     DatabaseReference RVdatabaseReference;

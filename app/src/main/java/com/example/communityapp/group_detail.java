@@ -40,8 +40,8 @@ public class group_detail extends AppCompatActivity {
      TextView CommunitName, CommunityDesc;
     private RecyclerView groupRV;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseUser currentUser;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
     @Override
     public void onBackPressed() {
@@ -68,42 +68,25 @@ public class group_detail extends AppCompatActivity {
         CommunityDesc.setText(groupDesc);
         CommunityDesc.setTextColor(Color.BLACK);
 
+        String groupCreatorId = getIntent().getExtras().getString("groupCreatorId");
 
+        String id = currentUser.getUid();
 
-//        String community_Cr_ID = getIntent().getExtras().getString("groupCreatorId");
-
+        String community_Cr_ID = getIntent().getExtras().getString("groupCreatorId");
         FloatingActionButton fab_notif = (FloatingActionButton) findViewById(R.id.add_new_notif);
 
+        if (id.compareTo(community_Cr_ID)==0){
+            fab_notif.setVisibility(View.VISIBLE);
+        }
+        else {
+            fab_notif.setVisibility(View.INVISIBLE);
+        }
         fab_notif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popNotif.show();
             }
         });
-
-//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//        DatabaseReference cNameRef = firebaseDatabase.getReference().child("Communities");
-//
-//        String key = cNameRef.getKey();
-//
-//        cNameRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot snapshot1 : snapshot.getChildren()){
-//                    String gettingCName = snapshot1.child("commName")
-//                            .getValue(String.class);
-//                    Note note = new Note();
-//                    note.setComName(gettingCName);
-//                }
-//
-//                Toast.makeText(group_detail.this, "" + comName, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         addNotif();
 
@@ -156,7 +139,7 @@ public class group_detail extends AppCompatActivity {
                     } else if (highButton.isChecked()) {
                         note.setPriority(highPriority);
                     } else {
-                        Toast.makeText(group_detail.this, "Wrong buttons", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(group_detail.this, "Choose priority", Toast.LENGTH_SHORT).show();
                     }
 
                     note.setComName(communityName);
@@ -180,28 +163,6 @@ public class group_detail extends AppCompatActivity {
     }
 
 
-//    private void getiingCName() {
-//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//
-//        DatabaseReference cNameRef = firebaseDatabase.getReference();
-//
-//        cNameRef.child("Communities")
-//
-////        ValueEventListener cNameListener = new ValueEventListener() {
-////            @Override
-////            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                group_intro groupIntro = snapshot.getValue(group_intro.class);
-////
-////            }
-////
-////            @Override
-////            public void onCancelled(@NonNull DatabaseError error) {
-////                Log.d(TAG, "onCancelled: ", error.toException());
-////
-////            }
-////        };
-//
-//    }
 
     private void addToFb(Note note) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
