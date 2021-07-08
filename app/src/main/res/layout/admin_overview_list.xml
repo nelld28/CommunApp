@@ -15,7 +15,7 @@
 <!--        tools:ignore="MissingConstraints">-->
 
     <TextView
-        android:id="@+id/over_view_item"
+        android:id="@+id/admin_post_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

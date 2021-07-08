@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class group_detail extends AppCompatActivity {
     Dialog popNotif;
     TextView comName, inNum, recNum, matReq;
      RadioButton lowButton, medButton, highButton;
+     RadioGroup radioGroup;
      ImageView addNotifBtn;
 
      TextView CommunitName, CommunityDesc;
@@ -61,6 +63,8 @@ public class group_detail extends AppCompatActivity {
         CommunityDesc = findViewById(R.id.group_desc);
         groupRV = findViewById(R.id.gr_RV);
 
+//        getting commmunity details from adapter using intent
+
         String groupName = getIntent().getExtras().getString("groupName");
         CommunitName.setText(groupName);
 
@@ -68,13 +72,12 @@ public class group_detail extends AppCompatActivity {
         CommunityDesc.setText(groupDesc);
         CommunityDesc.setTextColor(Color.BLACK);
 
-        String groupCreatorId = getIntent().getExtras().getString("groupCreatorId");
-
         String id = currentUser.getUid();
 
         String community_Cr_ID = getIntent().getExtras().getString("groupCreatorId");
         FloatingActionButton fab_notif = (FloatingActionButton) findViewById(R.id.add_new_notif);
 
+//        comparing current use id and community creator id to set notif dd button's visibility
         if (id.compareTo(community_Cr_ID)==0){
             fab_notif.setVisibility(View.VISIBLE);
         }
@@ -88,10 +91,12 @@ public class group_detail extends AppCompatActivity {
             }
         });
 
+//        to call addNotif method
         addNotif();
 
     }
 
+//    to add a notification
     private void addNotif() {
 
         popNotif = new Dialog(this);
@@ -110,10 +115,12 @@ public class group_detail extends AppCompatActivity {
         medButton = popNotif.findViewById(R.id.med_Button);
         highButton = popNotif.findViewById(R.id.high_Button);
         addNotifBtn = popNotif.findViewById(R.id.add_Notif);
+        radioGroup = popNotif.findViewById(R.id.radioGroup);
 
         String groupName = getIntent().getExtras().getString("groupName");
         comName.setText(groupName);
 
+//        setting a litener to the add notification button to send data to notification page
         addNotifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,8 +128,8 @@ public class group_detail extends AppCompatActivity {
                 if(!inNum.getText().toString().isEmpty() &&
                     !recNum.getText().toString().isEmpty() &&
                     !matReq.getText().toString().isEmpty()
-                    ) {
 
+                    ) {
                     String communityName = comName.getText().toString();
                     String infectNum = inNum.getText().toString();
                     String recoverNum = recNum.getText().toString();
@@ -162,8 +169,7 @@ public class group_detail extends AppCompatActivity {
 
     }
 
-
-
+//    adding the notification details to firebase
     private void addToFb(Note note) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference nRef = firebaseDatabase.getReference("Notifs").push();

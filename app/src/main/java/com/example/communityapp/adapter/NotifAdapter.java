@@ -72,12 +72,12 @@ public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.MyViewHolder
              nRecNum = itemView.findViewById(R.id.nRec_Num);
              nMatRec = itemView.findViewById(R.id.rec_mat);
 
-
-
+//             getting firebase references
              FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference prRef = firebaseDatabase.getReference()
                     .child("Notifs");
 
+//            to set the priority of the materials required.
             prRef.child("priority").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot snapshot) {
@@ -101,10 +101,6 @@ public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.MyViewHolder
             });
 
 
-
-
-
-
         }
     }
 
@@ -115,7 +111,6 @@ public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.MyViewHolder
 
 }
 
-//
 
 
 

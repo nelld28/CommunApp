@@ -78,6 +78,7 @@ public class NotifFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+//        firebase referencing to add value to note model
         nRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

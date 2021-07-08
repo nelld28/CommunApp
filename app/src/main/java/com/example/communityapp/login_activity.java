@@ -78,7 +78,7 @@ public class login_activity extends AppCompatActivity {
                 firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getApplicationContext(), "Your Google Account is connected to our Api", Toast.LENGTH_SHORT)
+                        Toast.makeText(getApplicationContext(), "Welcome to the Community App", Toast.LENGTH_SHORT)
                                 .show();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
 

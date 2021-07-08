@@ -77,7 +77,6 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
         ImageView postImg, imgPostProfile;
 
 
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -85,6 +84,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
             postImg = itemView.findViewById(R.id.row_post_img);
             imgPostProfile = itemView.findViewById(R.id.row_post_profile);
 
+//            to access post detail page
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,11 +137,7 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.MyViewHolder> 
             });
 
 
-
-
         }
     }
-
-
 
 }

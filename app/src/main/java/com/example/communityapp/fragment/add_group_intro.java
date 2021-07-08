@@ -95,8 +95,7 @@ public class add_group_intro extends Fragment {
         Glide.with(getActivity()).load(currentUser.getPhotoUrl())
                 .into(commUserImg);
 
-//        groupDatabase = FirebaseDatabase.getInstance();
-//        groupDataRef = groupDatabase.getReference().child("group_intro");
+
         commAddBtn = rootview.findViewById(R.id.comm_add);
 
         setUpcommImageClick();
@@ -104,17 +103,7 @@ public class add_group_intro extends Fragment {
         commAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String groupName = commName.getText().toString();
-//
-//
-//                if(TextUtils.isEmpty(groupName)){
-//                    Toast.makeText(getActivity(), "Enter value", LENGTH_SHORT).show();
-//
-//                }
-//                else
-//                {
-//                    addDataToFirebase(groupName);
-//                }
+
 
                 commAddBtn.setVisibility(View.INVISIBLE);
                 commProg.setVisibility(View.VISIBLE);

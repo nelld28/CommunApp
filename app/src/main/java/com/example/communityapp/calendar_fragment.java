@@ -49,9 +49,12 @@ public class calendar_fragment extends Fragment {
         description = rootView.findViewById(R.id.cal_desc);
         addBtn =rootView.findViewById(R.id.call_add_btn);
 
+//        to add the calendar event
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if all the detail fields are filled then calendar event is created and
+//                sent to calendar using intent
                 if(!title.getText().toString().isEmpty() &&
                 !location.getText().toString().isEmpty() &&
                 !description.getText().toString().isEmpty()){
@@ -68,9 +71,6 @@ public class calendar_fragment extends Fragment {
                     intent.putExtra(Intent.EXTRA_EMAIL, "");
 
                     startActivity(intent);
-
-//                    https://www.youtube.com/watch?v=NK_-phxyIAM&ab_channel=CodingDemos
-
 
                 }
                 else{

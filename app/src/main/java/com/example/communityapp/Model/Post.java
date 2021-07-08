@@ -26,22 +26,6 @@ public class Post {
         this.timeStamp = ServerValue.TIMESTAMP;
     }
 
-//    public Post(String id, String title, String description, String userId) {
-//    }
-
-//    public Map<String, Object> toMap(){
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("postKey", postKey);
-//        result.put("title", title);
-//        result.put("description", description);
-//        result.put("picture", picture);
-//        result.put("userId", userId);
-//        result.put("userPhoto", userPhoto);
-//        result.put("timeStamp", timeStamp);
-//
-//        return result;
-//    }
-
 
     public Post() {
     }

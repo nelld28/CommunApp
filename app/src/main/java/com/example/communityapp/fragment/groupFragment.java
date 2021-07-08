@@ -81,6 +81,7 @@ public class groupFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+//        firebase referencing to set community
         databaseReferenceRV.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -104,21 +105,7 @@ public class groupFragment extends Fragment {
             }
         });
 
-//        databaseReferenceRVM.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                memList = new ArrayList<>();
-//                for (DataSnapshot memSnap : snapshot.getChildren()){
-//                    Members member = memSnap.getValue(Members.class);
-//                    member.setPostKey();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+
     }
 
     @Override

@@ -76,6 +76,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             tv_content = itemView.findViewById(R.id.comment_content);
             tv_date = itemView.findViewById(R.id.comment_date);
 
+//            to delete comment
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -113,6 +114,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
     }
 
+//    to get comment's time stamp
     private String timeStampToString(long time){
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(time);

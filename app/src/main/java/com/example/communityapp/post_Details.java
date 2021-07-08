@@ -5,29 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.media.Image;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.communityapp.Model.Comment;
-import com.example.communityapp.Model.Post;
-import com.example.communityapp.R;
 import com.example.communityapp.adapter.CommentAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,10 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class post_Details extends AppCompatActivity {
 
@@ -54,12 +51,20 @@ public class post_Details extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser fbUser;
     FirebaseDatabase fbDatabase;
+    DatabaseReference postRef;
 
     RecyclerView CommentRV;
     CommentAdapter commentAdapter;
     List<Comment> listComment;
     static  String COMMENT_KEY = "Comment";
 
+    Dialog updatepost;
+    TextView updatePostTitle, updatePostDescription;
+    ImageView updateBtn, upDateUserImg;
+    ProgressBar updatePBar;
+
+
+    String postImage, postTitle, userpostImg, postDescription, postUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class post_Details extends AppCompatActivity {
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         CommentRV = findViewById(R.id.commentRV );
+
         imgPost = findViewById(R.id.post_detail_img);
         imgUserPost = findViewById(R.id.post_detail_user_img);
         imgCurrentUser = findViewById(R.id.post_detail_currentUser_img);
@@ -88,6 +94,8 @@ public class post_Details extends AppCompatActivity {
         fbUser = firebaseAuth.getCurrentUser();
         fbDatabase = FirebaseDatabase.getInstance();
 
+        fbDatabase = FirebaseDatabase.getInstance();
+        postRef = fbDatabase.getReference("Posts");
 
         addCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,32 +128,49 @@ public class post_Details extends AppCompatActivity {
             }
         });
 
-        String postImage = getIntent().getExtras().getString("postImage");
+        showPostDate();
+
+        inRVComment();
+
+        updateEvent();
+
+    }
+
+    private void showPostDate() {
+//        getting post image from adapter
+        postImage = getIntent().getExtras().getString("postImage");
         Glide.with(this).load(postImage).into(imgPost);
 
-        String postTitle = getIntent().getExtras().getString("title");
+//        getting post title from adapter
+        postTitle = getIntent().getExtras().getString("title");
         txtPostTitle.setText(postTitle);
 
-        String userpostImg = getIntent().getExtras().getString("userPhoto");
+//        getting post creator's image from adapter
+        userpostImg = getIntent().getExtras().getString("userPhoto");
         Glide.with(this).load(userpostImg).into(imgUserPost);
 
-       String postDescription = getIntent().getExtras().getString("description");
-       txtPostDesc.setText(postDescription);
+//        getting post description from adapter
+        postDescription = getIntent().getExtras().getString("description");
+        txtPostDesc.setText(postDescription);
 
-       String postUserID = getIntent().getExtras().getString("userId");
+//
+//        getting post creator's id from adapter
+        postUserID = getIntent().getExtras().getString("userId");
 
 //       setting commenting user image
         Glide.with(this).load(fbUser.getPhotoUrl()).into(imgCurrentUser);
 
+//        getting post's key from adapter
         post_Key = getIntent().getExtras().getString("postKey");
 
+//        getting post creation date from adapter
         String datePost = timeStampToString(getIntent().getExtras().getLong("postDate"));
         txtPostDateName.setText(datePost);
 
-        inRVComment();
-
+//        getting current user id
         String fbUserid = fbUser.getUid();
 
+//        comparing current user with post creator id to display edit button accordingly
         if (fbUserid.equals(postUserID)){
             editPostBtn.setVisibility(View.VISIBLE);
         }
@@ -153,12 +178,68 @@ public class post_Details extends AppCompatActivity {
         else {
             editPostBtn.setVisibility(View.INVISIBLE);
         }
+    }
 
+//    updating post
+    private void updateEvent() {
 
+        updatepost = new Dialog(this);
+        updatepost.setContentView(R.layout.update_dialog);
+        updatepost.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        updatepost.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        updatepost.getWindow().getAttributes().gravity = Gravity.TOP;
+
+        updatePostTitle = updatepost.findViewById(R.id.popup_title);
+        updatePostDescription = updatepost.findViewById(R.id.popup_description);
+        upDateUserImg = updatepost.findViewById(R.id.popup_user_image);
+
+        updateBtn = updatepost.findViewById(R.id.popup_update);
+        updatePBar = updatepost.findViewById(R.id.popup_progressBar);
+
+//          putting listener to update button
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtn.setVisibility(View.INVISIBLE);
+                updatePBar.setVisibility(View.VISIBLE);
+                if (isTitlechanged() || ispostDescriptionChanged()){
+                    Toast.makeText(post_Details.this, "Data is changed", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(post_Details.this, "Data is same", Toast.LENGTH_SHORT).show();
+                    updatePBar.setVisibility(View.INVISIBLE);
+                    updateBtn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+//    check if description has changed
+    private boolean ispostDescriptionChanged() {
+        if(!postDescription.equals(updatePostDescription.getEditableText().toString())){
+            postRef.child(post_Key).child("description").setValue(updatePostDescription.getEditableText().toString());
+            updatepost.dismiss();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+//    check if title has changed
+    private boolean isTitlechanged() {
+        if(!postTitle.equals(updatePostTitle.getEditableText().toString())){
+            postRef.child(post_Key).child("title").setValue(updatePostTitle.getEditableText().toString());
+            updatepost.dismiss();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 
-
+//    to fill the comment recycler view
     private void inRVComment() {
         CommentRV.setLayoutManager(new LinearLayoutManager(this));
 
@@ -188,12 +269,13 @@ public class post_Details extends AppCompatActivity {
 
     }
 
-
+//   to show message for error
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
     }
 
+//    to get the timestamp of post created
     private String timeStampToString(long time){
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(time);
@@ -201,8 +283,9 @@ public class post_Details extends AppCompatActivity {
         return date;
     }
 
-
+//      method put into update button
     public void updatePost(View view) {
+        updatepost.show();
 
     }
 }

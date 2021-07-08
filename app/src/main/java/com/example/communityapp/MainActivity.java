@@ -23,7 +23,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -184,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
     //          END OF ONCREATE
 
     private void popUpComm() {
+//        Dailog box creation
         popUpAddComm = new Dialog(this);
         popUpAddComm.setContentView(R.layout.fragment_add_group_intro2);
         popUpAddComm.getWindow().setBackgroundDrawable(new ColorDrawable(Color
@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 Toolbar.LayoutParams.WRAP_CONTENT);
         popUpAddComm.getWindow().getAttributes().gravity = Gravity.TOP;
 
+//        fields to the dialog box
         commName = popUpAddComm.findViewById(R.id.community_name);
         commDesc = popUpAddComm.findViewById(R.id.community_description);
         commUserImg = popUpAddComm.findViewById(R.id.community_creater_user_image);

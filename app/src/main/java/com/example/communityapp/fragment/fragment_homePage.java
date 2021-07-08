@@ -75,6 +75,7 @@ public class fragment_homePage extends Fragment {
     public void onStart() {
         super.onStart();
 //        homePageAdapter.startListening();
+//        firebase referencing for setting the post model
         RVdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -126,17 +127,7 @@ public class fragment_homePage extends Fragment {
                 .setQuery(RVdatabaseReference, Post.class)
                 .build();
 
-//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT||ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//
-//            }
-//        })
+
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
             @Override
@@ -149,47 +140,6 @@ public class fragment_homePage extends Fragment {
                 Toast.makeText(getActivity(), "Item has been swiped", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(postRV);
-
-
-//        RECYCLERvIEW
-//        RVdatabaseReference = FirebaseDatabase.getInstance().getReference();
-//
-//        recyclerView = rootview.findViewById(R.id.group_recycler_view);
-//
-//        recyclerView.setLayoutManager(
-//                new LinearLayoutManager(getActivity()));
-//
-//        FirebaseRecyclerOptions<group_intro> options =
-//                new FirebaseRecyclerOptions.Builder<group_intro>()
-//                .setQuery(RVdatabaseReference, group_intro.class)
-//                .build();
-//        homePageAdapter = new homePage(options);
-//        recyclerView.setAdapter(homePageAdapter);
-
-//        card group
-//        groupCard = rootview.findViewById(R.id.group_card);
-//
-//        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.content_frame, groupFragment.newInstance())
-//                        .addToBackStack(null)
-//                        .commitNow();
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
-
 
 
 

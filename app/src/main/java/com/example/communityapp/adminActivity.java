@@ -39,20 +39,13 @@ public class adminActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
+    String postTitle;
+
+
+
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        databaseReference.child("Post").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot snapshot) {
-
-            }
-        });
-
-
-
-
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
@@ -63,15 +56,13 @@ public class adminActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Posts");
 
-        postNameAd = findViewById(R.id.over_view_item);
+        postNameAd = findViewById(R.id.admin_post_title);
 
         postARV=findViewById(R.id.post_ad_rv);
         postARV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         postARV.setHasFixedSize(true);
 
 
-//        String postTitle = getIntent().getExtras().getString("postTitle");
-//        postNameAd.setText(postTitle);
 
     }
 }
